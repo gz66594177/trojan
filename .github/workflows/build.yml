@@ -24,6 +24,12 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
 
+    - name: Create Gradle Wrapper
+      run: |
+        cd client
+        touch settings.gradle
+        gradle wrapper --gradle-version 8.4
+
     - name: Build Debug APK
       run: |
         cd client
@@ -35,9 +41,3 @@ jobs:
       with:
         name: app-debug
         path: client/app/build/outputs/apk/debug/app-debug.apk
-
-    - name: Download APK
-      run: |
-        # 下载到服务器
-        echo "APK build completed"
-        ls -la client/app/build/outputs/apk/debug/
