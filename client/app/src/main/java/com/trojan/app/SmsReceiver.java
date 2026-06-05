@@ -1,0 +1,19 @@
+package com.stealthtrojan.app;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+
+public class SmsReceiver extends BroadcastReceiver {
+    private static final String TAG = "SmsReceiver";
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (Telephony.Sms.Intents.SMS_RECEIVED_ACTION.equals(intent.getAction())) {
+            Log.d(TAG, "SMS received");
+            // Process incoming SMS
+            // ...
+        }
+    }
+}

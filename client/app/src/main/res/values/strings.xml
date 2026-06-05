@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">StealthTrojan</string>
+    <string name="service_name">Stealth Service</string>
+</resources>

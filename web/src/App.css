@@ -1,0 +1,108 @@
+.app {
+  min-height: 100vh;
+}
+
+.header {
+  background: #1a1a1a;
+  padding: 20px;
+  border-bottom: 2px solid #00ff00;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  color: #00ff00;
+  font-size: 24px;
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-btn {
+  background: #2a2a2a;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-btn.active, .nav-btn:hover {
+  background: #00ff00;
+  color: #000;
+}
+
+.main {
+  padding: 20px;
+}
+
+.device-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.device-card {
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #333;
+  transition: all 0.3s;
+}
+
+.device-card:hover {
+  border-color: #00ff00;
+}
+
+.device-info {
+  color: #fff;
+}
+
+.device-status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.status-active { background: #00ff00; color: #000; }
+.status-inactive { background: #ff4400; color: #fff; }
+.status-sleeping { background: #ffaa00; color: #000; }
+
+.command-center {
+  background: #1a1a1a;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.command-form {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.command-form input, .command-form button {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #333;
+}
+
+.command-form button {
+  background: #00ff00;
+  color: #000;
+  font-weight: bold;
+}
+
+.log-entry {
+  background: #1a1a1a;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border-left: 3px solid #00ff00;
+}
