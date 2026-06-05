@@ -27,7 +27,6 @@ jobs:
     - name: Create Gradle Wrapper
       run: |
         cd client
-        touch settings.gradle
         gradle wrapper --gradle-version 8.4
 
     - name: Build Debug APK
@@ -41,3 +40,4 @@ jobs:
       with:
         name: app-debug
         path: client/app/build/outputs/apk/debug/app-debug.apk
+
